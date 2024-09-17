@@ -1,6 +1,6 @@
 /**
  * UFO on a Dark Night
- * Pippin Barr
+ * Benjamin Macknofsky
  * 
  * A UFO. On a dark night. It just sits there?
  */
@@ -33,8 +33,21 @@ function setup() {
  * Displays a UFO
 */
 function draw() {
+    // Dawn
+    skyShade = skyShade + 1;
     // Display the sky
     background(skyShade);
+
+    // Move the UFO
+    ufo.x = ufo.x + 0.5;
+    ufo.y = ufo.y - 2;
+
+    // Change its fill
+    ufo.fill = ufo.fill * 0.995;
+
+    // Change its shape
+    ufo.width = ufo.width / 1.005;
+    ufo.height = ufo.height / 1.005;
 
     // Draw the UFO based on its properties
     push();
