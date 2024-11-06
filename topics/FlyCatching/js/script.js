@@ -36,7 +36,7 @@ const frog = {
 
 // Array to hold multiple fireflies
 let fireflies = [];
-let numFireflies = 5; // Number of fireflies on the screen at once
+let numFireflies = 5;
 
 // Score variable to track how many fireflies have been caught
 let score = 0;
@@ -58,7 +58,7 @@ function draw() {
     if (gameState === "title") {
         drawTitleScreen();
     } else if (gameState === "playing") {
-        background(isDayTime ? "#87CEEB" : "#191970"); // Sky blue for day, dark blue for night
+        background(isDayTime ? "#87CEEB" : "#191970");
         drawWater();
         moveFireflies();
         drawFireflies();
@@ -81,7 +81,7 @@ function draw() {
  * Draws the title screen with game title and instructions
  */
 function drawTitleScreen() {
-    background("#87CEEB"); // Sky blue for a title screen
+    background("#87CEEB");
     textAlign(CENTER, CENTER);
     fill("#FFFFFF");
     textSize(48);
@@ -97,7 +97,7 @@ function drawTitleScreen() {
  * Draws the end screen when the game is over
  */
 function drawEndScreen() {
-    background("#FF6347"); // A red background for the end screen
+    background("#FF6347");
     textAlign(CENTER, CENTER);
     fill("#FFFFFF");
     textSize(32);
@@ -113,13 +113,13 @@ function drawEndScreen() {
 function drawWater() {
     push();
     noStroke();
-    fill(0, 191, 255, 150); // Light blue water color with transparency
+    fill(0, 191, 255, 150);
 
     // Draw multiple consistent sine waves across the canvas
-    for (let y = 400; y < height; y += 10) { // Rows start at frog level, each row slightly above the previous
+    for (let y = 400; y < height; y += 10) {
         beginShape();
         for (let x = 0; x <= width; x += 10) {
-            let offset = sin((x * 0.05) + frameCount * 0.05) * 5; // Consistent sine wave offset that animates horizontally
+            let offset = sin((x * 0.05) + frameCount * 0.05) * 5;
             vertex(x, y + offset);
         }
         vertex(width, height);
@@ -136,7 +136,8 @@ function moveFireflies() {
     for (let firefly of fireflies) {
         if (!firefly.isCaught) {
             // Occasionally switch direction with a smaller chance
-            if (random() < 0.02) { // Reduced chance to change direction
+            // Reduced chance to change direction
+            if (random() < 0.02) {
                 firefly.direction *= -1;
             }
 
@@ -173,13 +174,13 @@ function drawFireflies() {
         push();
         noStroke();
 
-        // If it's nighttime, add glow; else, draw without it
+        // If it's nighttime, add glow, else, draw without it
         if (!isDayTime) {
             fill(173, 255, 47, 100);
             ellipse(firefly.x, firefly.y, firefly.size * 3);
         }
 
-        fill(isDayTime ? "#000000" : "#ADFF2F"); // Black fly in day, glowing in night
+        fill(isDayTime ? "#000000" : "#ADFF2F");
         ellipse(firefly.x, firefly.y, firefly.size);
         pop();
     }
@@ -196,7 +197,7 @@ function resetFirefly(index) {
         speed: 3,
         angle: random(0, TWO_PI),
         isCaught: false,
-        direction: 1 // Start moving right initially
+        direction: 1
     };
 }
 
@@ -209,7 +210,7 @@ function moveFrogAndLilyPad() {
 }
 
 /**
- * Handles moving the tongue based on its state
+ * allows you to move the tongue based on its state
  */
 function moveTongue() {
     frog.tongue.x = frog.body.x;
@@ -312,11 +313,11 @@ function mousePressed() {
 }
 
 /**
- * Handles key presses to start/restart the game and toggle day/night
+ * allows you to start/restart the game and toggle day/night using keys
  */
 function keyPressed() {
     if (gameState === "title") {
-        gameState = "playing"; // Start the game when any key is pressed
+        gameState = "playing";
     } else if (gameState === "playing") {
         if (key === ' ') {
             isDayTime = !isDayTime;

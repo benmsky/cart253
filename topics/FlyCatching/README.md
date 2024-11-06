@@ -1,9 +1,10 @@
 # Fly Catching
+Benjamin Macknofsky
 
-A game about catching flies.
+## [View the project online]()
 
-[Play it!](https://pippinbarr.github.io/cart253-examples/topics/making/frogfrogfrog/index.html)
+## Description
+This program is a simple interactive game where you control a frog with your mouse to catch flies using its tongue. The game has two modes: day and night, which can be toggled with the spacebar. The objective is to catch 20 flies by launching the frog’s tongue with a mouse click. Each fly you catch adds to your score. Once you reach 20 flies, the game ends with a congratulatory message. The game features smooth animations, a dynamic water background, and a glowing effect for the flies at night.
 
-- [Ideas](./ideas.md)
-- [Planning](./planning.md)
-- [Pseudocode](./pseudocode.md)
+## Credits
+This project uses [p5.js](https://p5js.org).
