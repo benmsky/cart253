@@ -7,6 +7,7 @@
  * Instructions:
  * - Move the frog with your mouse
  * - Click to launch the tongue
+ * - Press spacebar to change Night to Day
  * - Catch flies
  * 
  * Made with p5
