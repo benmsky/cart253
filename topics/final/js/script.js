@@ -10,9 +10,7 @@ let lastShotTime = 0; // Cooldown timer
 let shotCooldown = 100; // Time in milliseconds between shots (adjust as needed)
 let maxBullets = 10; // Maximum number of bullets on screen at once
 let powerUps = [];
-let rapidFire = false;
 let tripleShot = false;
-let shieldActive = false;
 let powerUpTimer = 0;
 let starField = [];
 
@@ -20,11 +18,9 @@ let starField = [];
 let particles = [];
 let gravity = 0.05;
 
-// New enemy types
-let enemies = [];
-
 // New background effects
 let nebulaEffect;
+let showIntro = true;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -50,6 +46,12 @@ function draw() {
   fill(255, 255, 255, 150);
   for (let star of starField) {
     ellipse(star.x, star.y, random(1, 3));
+  }
+
+  // Show intro text
+  if (showIntro) {
+    showIntroduction();
+    return;
   }
 
   // Power-Up timer
@@ -149,10 +151,20 @@ function draw() {
   displayScore();
 }
 
-// Toggle full-auto mode with spacebar
+function showIntroduction() {
+  fill(255);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text("Welcome to the game! Here are the mechanics:\n\n1. Move the turret with your mouse.\n2. Click to shoot bullets.\n3. Press the spacebar for full-auto mode.\n4. Collect power-ups to upgrade your weapons.\n\nPress any key to start.", width / 2, height / 2);
+}
+
 function keyPressed() {
   if (key === ' ') {
     fullAutoMode = !fullAutoMode;
+  }
+
+  if (showIntro) {
+    showIntro = false; // Hide intro when a key is pressed
   }
 }
 
@@ -426,5 +438,4 @@ class NebulaEffect {
     noStroke();
     ellipse(random(width), random(height), random(50, 150));
   }
-  
 }
