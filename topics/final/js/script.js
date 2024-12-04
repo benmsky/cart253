@@ -1,3 +1,20 @@
+/**
+ * Alien Defence
+ * Benjamin Macknofsky
+ * 
+ * A game where the player controls a turret and tries to shoot
+ * as many aliens as possible to defend the land.
+ * 
+ * Controls: 
+ * - mouse to move the turret
+ * - click to shoot bullets
+ * - spacebar to toggle full auto mode
+ * 
+ * Uses:
+ * p5.js
+ * https://p5js.org
+ */
+
 let turret;
 let bullets = [];
 let fallingObjects = [];
@@ -6,9 +23,12 @@ let objectSpeed = 2;
 let explosions = [];
 let fullAutoMode = false;
 let score = 0;
-let lastShotTime = 0; // Cooldown timer
-let shotCooldown = 100; // Time in milliseconds between shots (adjust as needed)
-let maxBullets = 10; // Maximum number of bullets on screen at once
+// Cooldown timer
+let lastShotTime = 0; 
+// Time in milliseconds between shots (gives the turret a slight reload)
+let shotCooldown = 100; 
+// Maximum number of bullets on screen at once (had to limit it due to crashing)
+let maxBullets = 10; 
 let powerUps = [];
 let tripleShot = false;
 let powerUpTimer = 0;
@@ -18,7 +38,7 @@ let starField = [];
 let particles = [];
 let gravity = 0.05;
 
-// New background effects
+// New background effects (attempting some glare as if it was an active combat zone)
 let nebulaEffect;
 let showIntro = true;
 
@@ -52,11 +72,6 @@ function draw() {
   if (showIntro) {
     showIntroduction();
     return;
-  }
-
-  // Power-Up timer
-  if (powerUpTimer > 0) {
-    powerUpTimer--;
   }
 
   // Update and show the turret
@@ -119,7 +134,8 @@ function draw() {
       } else {
         bullets.push(new Bullet(turret.x + turret.width / 2, height - turret.height, turret.angle));
       }
-      lastShotTime = currentTime; // Reset the shot timer
+      // Reset the shot timer
+      lastShotTime = currentTime; 
     }
   }
 
@@ -128,7 +144,7 @@ function draw() {
     powerUps.push(new PowerUp());
   }
 
-  // Update and show power-ups
+  // Show power-ups
   for (let i = powerUps.length - 1; i >= 0; i--) {
     powerUps[i].update();
     powerUps[i].show();
@@ -139,7 +155,7 @@ function draw() {
     }
   }
 
-  // Update and show particles
+  // Show particles
   for (let i = particles.length - 1; i >= 0; i--) {
     particles[i].update();
     particles[i].show();
@@ -164,10 +180,11 @@ function keyPressed() {
   }
 
   if (showIntro) {
-    showIntro = false; // Hide intro when a key is pressed
+    // Hide intro when a key is pressed
+    showIntro = false; 
   }
 }
-
+ // Fires either a single or triple shot of bullets from the turret when the mouse is clicked, depending on the player's power-up status and the game’s bullet limit
 function mousePressed() {
   if (!fullAutoMode && bullets.length < maxBullets) {
     if (tripleShot) {
@@ -190,39 +207,47 @@ function displayScore() {
 // Turret class with enhanced visual effects
 class Turret {
   constructor() {
-    this.x = width / 2 - 30; // Starting x position
-    this.y = height - 30;    // Fixed y position at the bottom of the screen
+    // Starting x position
+    this.x = width / 2 - 30; 
+    // Fixed y position at the bottom of the screen
+    this.y = height - 30;    
     this.width = 60;
     this.height = 30;
     this.barrelLength = 40;
     this.angle = 0;
-    this.speed = 5;  // Speed at which the turret moves left and right
+    // Speed at which the turret moves left and right
+    this.speed = 5;  
   }
 
   update() {
-    // Move turret with mouse position (or arrow keys)
+    // Move turret with mouse position
     if (mouseX > this.x + this.width / 2) {
-      this.x += this.speed; // Move right
+        // Move right
+      this.x += this.speed; 
     } else if (mouseX < this.x + this.width / 2) {
-      this.x -= this.speed; // Move left
+        // Move left
+      this.x -= this.speed; 
     }
 
     // Constrain turret within screen bounds
     this.x = constrain(this.x, 0, width - this.width);
     
-    // Update angle of the turret to aim at the mouse
+    // Angle of the turret to aim at the mouse
     this.angle = atan2(mouseY - (height - this.height), mouseX - (this.x + this.width / 2));
   }
 
   show() {
-    fill(150, 0, 0); // Dark red for the turret base
+    // Dark red for the turret base
+    fill(150, 0, 0); 
     rect(this.x, height - this.height, this.width, this.height);
     push();
     translate(this.x + this.width / 2, height - this.height);
     rotate(this.angle);
-    stroke(255, 0, 0); // Red barrel
+    // Red barrel
+    stroke(255, 0, 0); 
     strokeWeight(4);
-    line(0, 0, this.barrelLength, 0); // Barrel line
+    // Barrel line
+    line(0, 0, this.barrelLength, 0); 
     pop();
   }
 
@@ -241,7 +266,8 @@ class Bullet {
     this.height = 15;
     this.angle = angle;
     this.speed = bulletSpeed;
-    this.trail = []; // Store positions for the trail effect
+    // Store positions for the trail effect
+    this.trail = []; 
   }
 
   update() {
@@ -260,8 +286,10 @@ class Bullet {
   show() {
     // Draw the bullet trail with glowing effect
     for (let i = 0; i < this.trail.length; i++) {
-      let alpha = map(i, 0, this.trail.length, 0, 255); // Fade effect
-      fill(255, 255, 0, alpha); // Yellow glow
+      // Fade effect
+      let alpha = map(i, 0, this.trail.length, 0, 255); 
+      // Yellow glow
+      fill(255, 255, 0, alpha); 
       noStroke();
       ellipse(this.trail[i].x, this.trail[i].y, this.width, this.height);
     }
@@ -277,14 +305,15 @@ class Bullet {
   }
 }
 
-// Explosion class with advanced particle effects
+// Explosion class with particle effects
 class Explosion {
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.size = 40;
     this.particles = [];
-    for (let i = 0; i < 100; i++) {  // Increased number of particles
+    // Increased number of particles
+    for (let i = 0; i < 100; i++) {  
       this.particles.push(new Particle(this.x, this.y));
     }
   }
@@ -311,11 +340,14 @@ class Particle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = random(5, 15); // Random particle size
-    this.speed = random(1, 10); // Faster speed
+    // Random particle size
+    this.size = random(5, 15); 
+    // Faster speed
+    this.speed = random(1, 10); 
     this.angle = random(TWO_PI);
     this.lifespan = 255;
-    this.color = color(random(255), random(255), random(255)); // Random color for variety
+    // Random color for variety
+    this.color = color(random(255), random(255), random(255)); 
   }
 
   update() {
@@ -340,9 +372,12 @@ class FallingObject {
     constructor() {
       this.x = random(width);
       this.y = 0;
-      this.size = random(20, 60);  // Vary the size of the objects
-      this.speed = random(2, 5);  // Vary the falling speed
-      this.type = random(["rock", "alien", "satellite"]);  // Different types of objects
+      // Vary the size of the objects
+      this.size = random(20, 60);  
+      // Vary the falling speed
+      this.speed = random(2, 5);  
+      // Different types of objects
+      this.type = random([]);  
       this.angle = 0;
       this.wingFlapSpeed = 0.1;
       this.direction = random([-1, 1]);
@@ -362,14 +397,16 @@ class FallingObject {
   }
 
   drawWingedCreature() {
-    fill(200, 100, 255); // Light purple for creature
+    // Light purple for creature
+    fill(200, 100, 255); 
     ellipse(this.x, this.y, this.size);
 
     // More dynamic wing movement
     push();
     translate(this.x, this.y);
     rotate(this.angle);
-    fill(255, 255, 0); // Yellow wings
+    // Yellow "wings"
+    fill(255, 255, 0); 
     ellipse(-this.size / 2, 0, this.size / 2, this.size / 2);
     ellipse(this.size / 2, 0, this.size / 2, this.size / 2);
     pop();
@@ -385,7 +422,7 @@ class FallingObject {
   }
 }
 
-// PowerUp class with spawn logic
+// PowerUp class with spawn 
 class PowerUp {
     constructor() {
       this.x = random(width);
@@ -399,13 +436,15 @@ class PowerUp {
     }
   
     show() {
-      fill(255, 0, 255); // Pink power-up
+        // GREEN power-up
+      fill(0, 255, 0); 
       noStroke();
       ellipse(this.x, this.y, this.size);
       fill(255);
       textAlign(CENTER, CENTER);
       textSize(12);
-      text(this.type.charAt(0), this.x, this.y); // Show first letter for type
+      // Show first letter for type
+      text(this.type.charAt(0), this.x, this.y); 
     }
   }  
 
@@ -417,7 +456,8 @@ function applyPowerUp(powerUp) {
     } else if (powerUp.type === 'Nuke') {
       // Nuke power-up: destroy all falling objects
       fallingObjects = [];
-      score += 10; // Bonus score for using Nuke
+      // Bonus score for using Nuke
+      score += 10; 
     }
   }
   
